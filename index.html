@@ -10,16 +10,8 @@
 
     // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3setprovider
     web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
-    // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethcoinbase
-    var coinbase = web3.eth.coinbase;
 
-    // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethgetbalance
-    var balance = web3.eth.getBalance(coinbase);
-
-    // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethfilter
-    var latest = web3.eth.filter('latest');
-
-    // Compiled me.sol via https://chriseth.github.io/browser-solidity/?gist=1ac5c0ae8bc269b69144d294431c157c
+    //// Compiled me.sol via https://chriseth.github.io/browser-solidity/?gist=b2c494702c400265db9668fe5014cdf2
     // var meContract = web3.eth.contract([{"constant":false,"inputs":[],"name":"getFirst","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"myAddress","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[],"name":"first","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"last","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[],"name":"getLast","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"nick","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"twitter","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"dateJoined","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"inputs":[],"type":"constructor"}]);
     // var me = meContract.new(
     //    {
@@ -36,9 +28,19 @@
     //
     var contractAddress = "0x673380d0c63ff4dfdae9183d58208276c87741d1";
     var abiArray = [{"constant":false,"inputs":[],"name":"getFirst","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"myAddress","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[],"name":"first","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"last","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[],"name":"getLast","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"nick","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"twitter","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"dateJoined","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"inputs":[],"type":"constructor"}]
+
+    // Instantiating contract based on contract address and interface
+    // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethcontract
     var MyContract = web3.eth.contract(abiArray);
     var contractInstance = MyContract.at(contractAddress);
 
+    // Accessing the base address and its account balance
+    // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethcoinbase
+    var coinbase = web3.eth.coinbase;
+    // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethgetbalance
+    var balance = web3.eth.getBalance(coinbase);
+
+    // Accessing storage of the contract
     // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethgetstorageat
     var storageObject = web3.eth.getStorageAt(contractAddress);
     var firstName = web3.toAscii(web3.eth.getStorageAt(contractAddress, 0))
@@ -46,13 +48,21 @@
     var contractString = JSON.stringify(web3.eth.getStorageAt(contractAddress))
 
     document.addEventListener('DOMContentLoaded', function() {
+      // Showing your account and its balance
       document.getElementById('coinbase').innerText = coinbase;
       document.getElementById('balance').innerText = balance;
+
+      // Showing contract string and its data
       document.getElementById('contractString').innerText = contractString;
       document.getElementById('fullName').innerText = firstName + ' ' + lastName;
+
+      // Accessing public variables of the contract
       document.getElementById('fullName2').innerText = contractInstance.first() + ' ' + contractInstance.last();
     });
 
+
+    // Watching any newly added block to the network.
+    // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethfilter
     var pending = web3.eth.filter('pending');
     pending.watch(function(error, result){
       if(error) return;
@@ -62,6 +72,7 @@
       // https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethgetblock
       var block = web3.eth.getBlock(blockNumber);
 
+      // Showing the latest block added to the network.
       document.getElementById('latestBlock').innerText = blockNumber;
       document.getElementById('latestBlockHash').innerText = block.hash;
       document.getElementById('latestBlockTimestamp').innerText = Date(block.timestamp);
