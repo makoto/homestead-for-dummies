@@ -17,6 +17,10 @@ The tested environment is for OSX Yosemite, but I assume this is same in any Uni
 
 - Clone the code
 
+```
+git clone https://github.com/makoto/homestead-for-dummies.git
+```
+
 - Run geth in testnet mode allowing rpc call from local port 8000
 
 ```
@@ -34,3 +38,11 @@ python -m SimpleHTTPServer # defaults to port 8000
 ```
 open http://localhost:8000
 ```
+
+## How to deploy your own contract
+
+- Start `geth` with `--unlock` option specifying your own account
+- Compile contract at [browser compiler](https://chriseth.github.io/browser-solidity/?gist=800bb676087df0adb32d96c0598e4943)
+- Copy&paste code on `Web3 deploy` field at browser solidity
+- Update the new contract address at `var contractAddress=NEW_ADDRESS` at index.html
+- Reload the code.
