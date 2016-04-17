@@ -19,13 +19,18 @@ The tested environment is for OSX Yosemite, but I assume this is same in any Uni
 
 - Run geth in testnet mode allowing rpc call from local port 8000
 
-      geth --testnet --rpc --rpcaddr "127.0.0.1" --rpcport "8545" --rpcapi "db,eth,net,web3" --rpccorsdomain "http://localhost:8000"
-
+```
+geth --testnet --rpc --rpcaddr "127.0.0.1" --rpcport "8545" --rpcapi "db,eth,net,web3" --rpccorsdomain "http://localhost:8000"
+```
 
 - Startup web server at the port you specified at geth `--rpccorsdomain`
 
-      python -m SimpleHTTPServer # defaults to port 8000
+```
+python -m SimpleHTTPServer # defaults to port 8000
+```
 
 - Open the page
 
-      open http://localhost:8000
+```
+open http://localhost:8000
+```
